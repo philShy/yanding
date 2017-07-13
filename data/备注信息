@@ -1,0 +1,13 @@
+1、服务器配置（php.ini）
+post_max_size=8M
+upload_max_filesize=20M
+
+2、数据库配置（configs.php）
+define("DB_HOST", "localhost");
+define("DB_USER", "root");
+define("DB_PWD", "");
+define("DB_DBNAME","yandingtech");
+define("DB_CHARSET", "utf-8");
+
+3、上传图片配置（upload_json.php）
+$water_img = $_SERVER['DOCUMENT_ROOT'] .'/yanding/images/logo1.png';

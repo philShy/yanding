@@ -1,0 +1,156 @@
+Globel全部变量：
+$wp_filter  存储所有过滤器
+
+1默认模式 pathinfo
+http://localhost/thinkphp/index.php/Home/Index/user/id/1.html
+0普通模式
+http://localhost/thinkphp/index.php?m=Home&c=Index&a=user&id=1
+2重写模式
+http://localhost/thinkphp/Home/Index/user/id/1.html
+3兼容模式
+http://localhost/thinkphp/index.php?s=/Home/Index/user/id/1.html
+
+echo C('URL_MODEL') .'</br>';
+
+U('模块/方法'，array('id'=>1),'XXXX.html htm shtml',true/false,'localhost')
+
+echo U('Index/user',array('id'=>1),'html',true,'localhost');
+
+Html变量输出
+{$me.name|md5|substr=0,5}
+{$now|date='Y-m-d H:i:s',###}
+{$Think.now}
+{$Think.version}
+{$Think.server.http_host}
+
+循环数组
+<volist name="person" id="data" offset='1' lenght='3' empty="没数据">
+{//$data['name']}-----{//$data['age']}</br>
+</volist>
+
+<foreach name="person" item="data">
+{$data['name']}-----{$data['age']}</br>
+</foreach>
+
+eq =
+neq !=
+gt >
+egt >=
+lt <
+elt <=
+heq ===
+nheq  !==
+<for start="1" end="10" comparison="elt" name="k">
+{$k}
+</for>
+
+If语句（else后面一定要有/）
+<if condition="$num gt 10">num大于10
+<elseif condition="$num lt 10"/>num小于10
+<else/>num等于10
+</if>
+
+Switch语句
+ <switch name="name">
+  <case value="laoshi">小明滚</case>
+  <case value="xiaoming/xiaohuang">老师滚</case>
+  <default/>自己滚出去
+ </switch>
+
+<比较标签 name="变量名" value="比较的值"></比较标签>
+ <eq name="name" value="15">小明</eq>
+ <neq name="name" value="10">老师</neq>
+  等同于：
+<eq name="name" value="15">小明<else/>小红</eq>
+等同于：
+<compare name="name" value="15" type="eq">num=15<else/>num!=15</compare>
+
+区间判断 in notin between notbetween
+ <in name="num" value="1,2,3">在这个区间</in>
+ <notin name="num" value="1,2,3">不在这个区间</notin>
+ 等同于：
+ <in name="num" value="1,2,3">在这个区间<else/>不在这个区间</in>
+等同于：
+<between name="num" value="1,10">确实在这里<else/>不在这里</between>
+<notbetween name="num" value="1,10">不在这里</notbetween>
+等同于：
+<between name="num" value="1,10">确实在这里<else/>不在这里</between>
+range-type只能用in，不能用between
+<range name="num" value="1,10" type="in">有10这个数<else/>没有10这个数</range>
+
+三元运算符
+{$num>11?'大于11':'不大于11'}
+
+
+数据库
+add 增加一条数据
+addAll 增加条数据
+getLastSql 获得最后一条数据
+//直接使用字符串查找
+M(‘user’)->where(‘id=1’)->select();
+//使用数组方式进行查询
+$where[‘id’]=1;
+M(‘user’)->where($where)->select();
+
+$where[‘id’]=1;
+$where[‘user_name’]=’xiaoming’;
+$where[‘_logic’]=’or’;
+M(‘user’)->where($where)->select();
+
+
+//表达式查询 
+$where[‘字段名’] = array(表达式，查询条件);
+$where[‘id’]=array(‘gt’,1);
+M(‘user’)->where($where)->select();
+//区间查询
+$where[‘id’]=array(array(‘gt’,100),array(‘lt’,3),’or’)
+//表达式查询
+$where[‘id’]=array(‘gt’,1);
+$where[‘_string’] = ‘ score>10’;
+//统计用法count\max\min\avg\sum
+M(‘user’)->count();
+M(‘user’)->max(‘id’);
+//order排序
+M(‘user’)->order(‘score desc,id asc’)->select();
+//field
+M(‘user’)->field(‘id,user_name’)->order(‘score desc,id asc’)->select();
+M(‘user’)->field(‘id,user_name’,true)->order(‘score desc,id asc’)->select();
+//limit
+M(‘user’)->field(‘id,user_name’,true)->order(‘score desc,id asc’)->limit(5)->select();//从第一条开始查5条
+M(‘user’)->field(‘id,user_name’,true)->order(‘score desc,id asc’)->limit(2，5)->select();//过滤前2条，一共查5条
+//page(页码，每页的条数（默认20）)
+M(‘user’)->field(‘id,user_name’,true)->order(‘score desc,id asc’)->page(2，5)->select();
+
+
+
+
+
+
+
+
+
+
+//1.实例化基础模型model
+    	$user = new Model('user');//表名、表前缀、数据库连接信息
+    	$user = M('users');
+    	$data = $user->select();
+    	dump($data);
+    	//2.实例化用户自定义模型
+    	$user = new UsersModel();//表名、表前缀、数据库连接信息
+    	$data = $user->getinfo();
+    	dump($data);
+    
+    	$user = D('users');
+    	$data = $user->select();
+    	dump($data);
+    	//3.实例化公共模型
+    	$user = new CommonModel();
+    	$data = $user->strmake('aaa');
+    	dump($data);
+    	//4.实例化空模型
+    	$model = M();
+    	$data = $model->query('select * from users');//读取日常 select
+    	dump($data);
+    	$data = $model->execute('select * from users');//写入 update insert
+    	dump($data);
+
